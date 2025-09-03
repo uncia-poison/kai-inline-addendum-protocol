@@ -5,12 +5,12 @@ body:
   - type: textarea
     id: what
     attributes:
-      label: Что произошло?
+      label: What happened?
   - type: textarea
     id: repro
     attributes:
-      label: Как воспроизвести?
+      label: How to reproduce?
   - type: textarea
     id: expect
     attributes:
-      label: Что ожидалось?
+      label: What did you expect?
