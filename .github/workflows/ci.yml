@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-addendum:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Validate README formatting
+        run: |
+          python - <<'EOF'
+import re, sys
+path = 'README.md'
+with open(path, encoding='utf-8') as f:
+    lines = f.readlines()
+inside_code = False
+errors = []
+for i, line in enumerate(lines):
+    stripped = line.rstrip('\n')
+    if stripped.startswith('```'):
+        inside_code = not inside_code
+    if not inside_code:
+        # check for horizontal rule lines: U+2500 repeated or markdown hr
+        if re.fullmatch(r'\u2500{8,}', stripped) or stripped == '---':
+            plus_line = lines[i+1].strip() if i+1 < len(lines) else ''
+            blank_line = lines[i+2].strip() if i+2 < len(lines) else ''
+            if plus_line != '➕':
+                errors.append(f'Missing plus sign after separator at line {i+2}')
+            if blank_line != '':
+                errors.append(f'Missing blank line after plus sign at line {i+3}')
+if errors:
+    for e in errors:
+        print(e)
+    sys.exit(1)
+EOF
