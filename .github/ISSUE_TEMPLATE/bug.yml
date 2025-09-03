@@ -1,0 +1,16 @@
+name: Bug
+description: Format/logic error
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Что произошло?
+  - type: textarea
+    id: repro
+    attributes:
+      label: Как воспроизвести?
+  - type: textarea
+    id: expect
+    attributes:
+      label: Что ожидалось?
