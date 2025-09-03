@@ -2,23 +2,23 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   validate-addendum:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: "3.11"
 
-      - name: Validate README formatting
+      - name: Validate README addendum formatting
         run: |
           python - <<'EOF'
 import re, sys
@@ -32,16 +32,22 @@ for i, line in enumerate(lines):
     if stripped.startswith('```'):
         inside_code = not inside_code
     if not inside_code:
-        # check for horizontal rule lines: U+2500 repeated or markdown hr
-        if re.fullmatch(r'\u2500{8,}', stripped) or stripped == '---':
+        # check for horizontal rule lines: U+2500 repeated 12-16 times or Markdown hr '---'
+        if re.fullmatch(r'\u2500{12,16}', stripped):
             plus_line = lines[i+1].strip() if i+1 < len(lines) else ''
             blank_line = lines[i+2].strip() if i+2 < len(lines) else ''
-            if plus_line != '➕':
-                errors.append(f'Missing plus sign after separator at line {i+2}')
+            if plus_line != '+':
+                errors.append(f'Missing plus sign after rule on line {i+1}')
             if blank_line != '':
-                errors.append(f'Missing blank line after plus sign at line {i+3}')
+                errors.append(f'Missing blank line after plus on line {i+2}')
 if errors:
-    for e in errors:
-        print(e)
+    for error in errors:
+        print(error)
     sys.exit(1)
 EOF
+
+      - name: Verify repository structure
+        run: |
+          test -f SYSTEM.txt && echo "SYSTEM.txt exists"
+          test -f RUNTIME.md && echo "RUNTIME.md exists"
+          test -f templates/custom_instructions.md && echo "Templates present"
