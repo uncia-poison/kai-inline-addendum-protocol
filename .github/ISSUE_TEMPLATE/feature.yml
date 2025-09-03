@@ -1,0 +1,12 @@
+name: Feature
+description: Request or improvement
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: why
+    attributes:
+      label: Зачем это нужно?
+  - type: textarea
+    id: how
+    attributes:
+      label: Идея реализации
