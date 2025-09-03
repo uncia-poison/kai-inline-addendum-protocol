@@ -1,10 +1,10 @@
-### Что сделано
-- Коротко
+### What’s changed
+- Short summary
 
-### Чек-лист формата
-- [ ] Нет addendum внутри кода/таблиц
-- [ ] «Черта → ➕ → пустая строка → абзац» выдержан
-- [ ] Финальная строка — утверждение
+### Format checklist
+- [ ] No addendum inside code/tables
+- [ ] “Rule → ➕ → blank line → paragraph” respected
+- [ ] Final line is a statement
 
-### Прочее
-- Связанные темы/issue:
+### Notes
+- Related issues/links:
